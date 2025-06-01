@@ -98,3 +98,7 @@ Route::get('/kontakt_odrzavanje', function () {
     }
     return view('kontakt_odrzavanje'); 
 })->name('kontakt_odrzavanje');
+
+
+Route::get('/objava/create', [IzvjestajController::class, 'create'])->name('objava.create');
+Route::post('/objava', [IzvjestajController::class, 'store'])->name('objava.store');

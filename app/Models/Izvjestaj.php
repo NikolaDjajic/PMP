@@ -8,7 +8,8 @@ class Izvjestaj extends Model
 {
     
    protected $fillable = [
-        'naslov',
-        'tekst',
+        'opis',
+        'fajl',
+        'masina'
     ];
 }
