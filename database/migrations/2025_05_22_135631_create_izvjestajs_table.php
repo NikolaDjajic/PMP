@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+
 return new class extends Migration
 {
     /**
@@ -13,8 +14,12 @@ return new class extends Migration
     {
         Schema::create('izvjestajs', function (Blueprint $table) {
             $table->id();
-            $table->string('naslov');
-            $table->longText('tekst');
+            $table->longText('opis');
+            $table->longText('fajl');
+            $table->unsignedBigInteger('user_id'); // dodaj kolonu
+            $table->unsignedBigInteger('masina_id')->nullable(); // ili ->unsi
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('masina_id')->references('id')->on('masinas')->onDelete('cascade');
             $table->timestamps();
         });
     }

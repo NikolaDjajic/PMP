@@ -3,19 +3,8 @@
 @section('title', 'Izvještaji')
 
 @section('content')
-<div class="container-fluid" style="padding-top: 40px; min-height: 80vh;">
-  <div class="wrapper">
 
-    {{-- Dugme za otvaranje modala --}}
-    <div style="text-align: center;">
-  <div style="display: inline-block;">
-    <button id="dugme-dodaj" onclick="prikaziFormu()" class="btn-text">
-        Dodaj izvještaj
-    </button>
-  </div>
-</div>
-<br>
-<br>
+
    <style>
   .btn-text, .btn-text2 {
     text-decoration: none;
@@ -87,16 +76,31 @@ label.form-label {
 .mb-0 {
   margin-bottom: 0;
 }
-
-  
 </style>
+
+
+
+<div class="container-fluid" style="padding-top: 40px; min-height: 80vh;">
+  <div class="wrapper">
+
+    {{-- Dugme za otvaranje modala --}}
+    <div style="text-align: center;">
+  <div style="display: inline-block;">
+    <button id="dugme-dodaj" onclick="prikaziFormu()" class="btn-text">
+        Dodaj izvještaj
+    </button>
+  </div>
+</div>
+<br>
+<br>
+
 
 <div style="text-align: center;">
   <div id="forma-za-objavu" style="display: none;">
     <div class="card p-4 shadow-sm mb-5">
       <h4>Dodaj novi izvještaj</h4>
 
-      <form action="{{ route('objava.store') }}" method="POST" enctype="multipart/form-data">
+      <form action="{{ route('izvjestaji.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="mb-3">
@@ -110,12 +114,12 @@ label.form-label {
 </div>
 <br>
 <div class="mb-3">
-  <label for="masina" class="form-label">Odaberite mašinu:</label>
-  <select name="masina" id="masina" class="form-select" required>
+  <label for="masina_id" class="form-label">Odaberite mašinu:</label>
+  <select name="masina_id" id="masina_id" class="form-select" required>
     <option value="" disabled selected>-- Odaberite mašinu --</option>
-    <option value="masina1">Mašina 1</option>
-    <option value="masina2">Mašina 2</option>
-    <option value="masina3">Mašina 3</option>
+    @foreach($masine as $masina)
+            <option value="{{ $masina->id }}">{{ $masina->naziv }}</option>
+      @endforeach
   </select>
 </div>
 <br>
@@ -133,10 +137,10 @@ label.form-label {
     {{-- Prikaz izvještaja --}}
     @foreach($izvjestaji as $izvjestaj)
       <div class="mb-4">
+        <br>
         <x-izvjestaj-one-card :izvjestaj="$izvjestaj" />
       </div>
     @endforeach
-
   </div>
 </div>
 

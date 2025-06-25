@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Hash;
 
 return new class extends Migration
 {
@@ -15,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('username')->unique();
             $table->string('password');
+            $table->boolean('is_admin')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
@@ -36,7 +38,8 @@ return new class extends Migration
 
         DB::table('users')->insert([
             'username' => 'oliver',
-            'password' => 'oliver',
+            'password' => Hash::make('oliver'),
+            'is_admin' => '1',
             // 'created_at' => now(),
             // 'updated_at' => now(),
         ]);

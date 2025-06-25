@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap" rel="stylesheet">
-
-  <style>
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
+<style>
     html, body {
       margin: 0;
       padding: 0;
@@ -16,14 +16,13 @@
       text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
       overflow-x: hidden;
     }
-    
 
     body {
+      background-image: url('{{ asset('images/slika4.png') }}');
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
       background-attachment: fixed;
-      transition: background-image 1s ease-in-out;
     }
 
     .top-bar {
@@ -45,16 +44,13 @@
     }
 
     h1 {
-      h1 {
-  font-family: 'Oswald', sans-serif;
-  font-size: 42px;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  margin: 0;
-  color: red;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-}
-
+      font-family: 'Oswald', sans-serif;
+      font-size: 42px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin: 0;
+      color: red;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
     }
 
     .underline {
@@ -90,45 +86,39 @@
       transform: scale(1.05);
     }
 
-    .language-btn {
-      position: absolute;
-      top: 20px;
-      right: 170px;
-      padding: 10px 15px;
-      font-size: 14px;
-      background-color: #444;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .language-btn:hover {
-      background-color: #c00;
-    }
-    .logout-btn {
+    /* Novi kontejner za dugmad desno gore */
+    .top-right-buttons {
       position: absolute;
       top: 20px;
       right: 30px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    /* Stilovi za sva tri dugmeta u top-right-buttons */
+    .language-btn,
+    .logout-btn,
+    .users-btn {
       padding: 10px 15px;
       font-size: 14px;
-      background-color: #444;
-      color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
       transition: background 0.3s;
+      background-color: #444;
+      color: white;
+      text-decoration: none; /* za link */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
-  .logout-btn:hover {
-    background-color: #c00;
-    }
-
-
-    @keyframes shine {
-      0% { text-shadow: 2px 2px 8px rgba(255, 0, 0, 0.7); }
-      100% { text-shadow: 2px 2px 8px rgba(170, 170, 170, 0.7); }
+    .language-btn:hover,
+    .logout-btn:hover,
+    .users-btn:hover {
+      background-color: #c00;
     }
 
     @keyframes fadeInDown {
@@ -153,50 +143,43 @@
         flex-direction: column;
         align-items: center;
       }
+      /* Da dugmad ne izlaze van na mobilnom */
+      .top-right-buttons {
+        position: static;
+        margin-top: 10px;
+        justify-content: center;
+      }
     }
 
     .fixed-footer {
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        height: 80;
-        background-color: rgba(0, 0, 0, 0.7);
-        color: white;
-        text-align: center;
-        z-index: 999;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 80px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      text-align: center;
+      z-index: 999;
     }
-
   </style>
 </head>
 
 <body>
 
- <script>
+  <script>
     let isSerbian = true;
 
     const translations = {
       sr: [
-        "POCETNA",
-        "RADNI NALOZI",
-        "ZAPOSLENI",
-        "IZVJESTAJI",
-        "ISTORIJA KVAROVA",
-        "PRIJAVI KVAR I RJESENJE",
-        "SASTANCI",
-        "ODRZAVANJE OPREMA",
-        "KONTAKT ODRZAVANJE"
+        "POCETNA", "RADNI NALOZI", "ZAPOSLENI", "IZVJESTAJI",
+        "ISTORIJA KVAROVA", "PRIJAVI KVAR I RJESENJE",
+        "SASTANCI", "ODRZAVANJE OPREMA", "KONTAKT ODRZAVANJE"
       ],
       en: [
-        "HOME",
-        "WORK ORDERS",
-        "EMPLOYEES",
-        "REPORTS",
-        "FAILURE HISTORY",
-        "REPORT FAILURE & SOLUTION",
-        "MEETINGS",
-        "EQUIPMENT MAINTENANCE",
-        "MAINTENANCE CONTACT"
+        "HOME", "WORK ORDERS", "EMPLOYEES", "REPORTS",
+        "FAILURE HISTORY", "REPORT FAILURE & SOLUTION",
+        "MEETINGS", "EQUIPMENT MAINTENANCE", "MAINTENANCE CONTACT"
       ]
     };
 
@@ -207,28 +190,9 @@
       });
       isSerbian = !isSerbian;
     }
-
-    // SLIDESHOW BACKGROUND
-    const images = [
-      "{{ asset('images/Untitled.png') }}",
-      "{{ asset('images/slika2.png') }}",
-      "{{ asset('images/slika3.png') }}",
-      "{{ asset('images/slika4.png') }}"
-    ];
-
-    let currentIndex = 0;
-
-    function changeBackground() {
-      document.body.style.backgroundImage = `url('${images[currentIndex]}')`;
-      currentIndex = (currentIndex + 1) % images.length;
-    }
-
-    // Pokreni slideshow odmah i ponavljaj svakih 7 sekundi
-    changeBackground();
-    setInterval(changeBackground, 7000);
   </script>
 
-    {{-- HEADER --}}
+  {{-- HEADER --}}
   <header>
     <div class="top-bar">
       <img src="{{ asset('images/Untitled1.png') }}" alt="Logo" class="logo">
@@ -238,11 +202,15 @@
       </div>
     </div>
 
-    <button class="language-btn" onclick="toggleLanguage()">ENG/SRP</button>
+    <div class="top-right-buttons">
+      <button class="language-btn" onclick="toggleLanguage()">ENG/SRP</button>
 
-    <form method="GET" action="{{ route('logout') }}" style="display: inline;">
-      <button type="submit" class="logout-btn">ODJAVI SE</button>
-    </form>
+      <a href="{{ url('/korisnici') }}" class="users-btn">KORISNICI</a>
+      <a href="{{ url('/masine') }}" class="users-btn">MASINE</a>
+      <form method="GET" action="{{ route('logout') }}" style="display: inline;">
+        <button type="submit" class="logout-btn">ODJAVI SE</button>
+      </form>
+    </div>
 
     <nav>
       <a href="{{ url('/pocetna') }}" class="btn-text">POČETNA</a>
@@ -262,19 +230,19 @@
     @yield('content')
   </main>
 
-    <footer class="fixed-footer">
-        <br>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>
-                        Copyright © 2020 Company Name
-                        - Template by: <a href="https://www.phpjabbers.com/">PHPJabbers.com</a>
-                    </p>
-                </div>
-            </div>
+  <footer class="fixed-footer">
+    <br>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <p>
+            Copyright © 2020 Company Name
+            - Template by: <a href="https://www.phpjabbers.com/">PHPJabbers.com</a>
+          </p>
         </div>
-    </footer>
+      </div>
+    </div>
+  </footer>
 
 </body>
 </html>

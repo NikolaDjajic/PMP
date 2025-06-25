@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Masina extends Model
 {
-    protected $fillable = ['naziv'];
 
+     protected $fillable = [
+        'naziv',
+    ];
     public function izvjestaji()
-    {
-        return $this->hasMany(Izvjestaj::class);
-    }
+{
+    return $this->hasMany(\App\Models\Izvjestaj::class);
+}
 }

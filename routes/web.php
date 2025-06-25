@@ -5,7 +5,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Http\Controllers\IzvjestajController;
-
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\MasinaController;
 
 Route::get('/', function () {
     if (!session('logged_in')) {
@@ -27,7 +28,7 @@ Route::post('/login', function (Request $request) {
 
     $user = User::where('username', $request->username)->first();
     // dd($user); 
-    if ($user && $user->password == $request->input('password')) {
+    if ($user && Hash::check($request->input('password'), $user->password)) {
         session(['logged_in' => true, 'user_id' => $user->id]);
         return redirect()->route('pocetna');
     }
@@ -63,6 +64,8 @@ Route::get('/radni_nalozi', function () {
 })->name('radni_nalozi');
 
 Route::get('/izvjestaji', [IzvjestajController::class, 'index'])->name('izvjestaji');
+Route::post('/izvjestaji', [IzvjestajController::class, 'store'])->name('izvjestaji.store');
+
 
 Route::get('/istorija_kvarova', function () {
     if (!session('logged_in')) {
@@ -99,6 +102,29 @@ Route::get('/kontakt_odrzavanje', function () {
     return view('kontakt_odrzavanje'); 
 })->name('kontakt_odrzavanje');
 
+Route::middleware(['admin'])->get('/korisnici', [UserController::class, 'index'])->name('korisnici');
+Route::middleware(['admin'])->post('/korisnici', [UserController::class, 'store'])->name('korisnici.store');
+Route::middleware(['admin'])->delete('/korisnici/{id}', [UserController::class, 'delete'])->name('korisnici.delete');
 
-Route::get('/objava/create', [IzvjestajController::class, 'create'])->name('objava.create');
-Route::post('/objava', [IzvjestajController::class, 'store'])->name('objava.store');
+Route::middleware(['admin'])->get('/masine', [MasinaController::class, 'index'])->name('masine');
+Route::middleware(['admin'])->post('/masine', [MasinaController::class, 'store'])->name('masine.store');
+Route::middleware(['admin'])->delete('/masine/{id}', [MasinaController::class, 'delete'])->name('masine.delete');
+
+
+
+use Illuminate\Support\Facades\Response;
+
+
+Route::get('/masina/{id}/mehanicka', [MasinaController::class, 'downloadMehanicka']);
+Route::get('/masina/{id}/elektricna', [MasinaController::class, 'downloadElektricna']);
+Route::get('/test-masina/{id}/mehanicka', function($id) {
+    $filePath = "public/dokumentacija/masina_{$id}_mehanicka.png";
+
+    $exists = Storage::exists($filePath);
+
+    return response()->json([
+        'filePath' => $filePath,
+        'exists' => $exists,
+        'full_path' => Storage::path($filePath),
+    ]);
+});

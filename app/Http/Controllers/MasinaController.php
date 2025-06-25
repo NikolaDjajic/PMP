@@ -2,26 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Masina;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Masina;
 
 class MasinaController extends Controller
 {
-    // Prikaz svih mašina
-    public function index()
-    {
-        $masine = Masina::all();
-        return view('masine.index', compact('masine'));
+   public function downloadMehanicka($id)
+{
+    $filePath = "dokumentacija/masina_{$id}_mehanicka.pdf";
+
+    if (Storage::disk('public')->exists($filePath)) {
+        return Storage::disk('public')->download($filePath);
     }
 
-    // Prikaz forme za dodavanje
-    public function create()
-    {
-        return view('masine.create');
+    abort(404, 'Fajl nije pronađen');
+}
+
+public function downloadElektricna($id)
+{
+    $filePath = "dokumentacija/masina_{$id}_elektricna.pdf";
+
+    if (Storage::disk('public')->exists($filePath)) {
+        return Storage::disk('public')->download($filePath);
     }
 
-    // Čuvanje nove mašine
-    public function store(Request $request)
+    abort(404, 'Fajl nije pronađen');
+}
+public function index()
+    {
+        $masinas = Masina::all();
+        return view('admin/masine', compact('masinas'));
+    }
+
+public function store(Request $request)
     {
         $request->validate([
             'naziv' => 'required|string|max:255',
@@ -31,6 +45,17 @@ class MasinaController extends Controller
             'naziv' => $request->naziv,
         ]);
 
-        return redirect()->route('masine.index')->with('success', 'Mašina je uspešno dodana.');
+        return redirect()->route('masine')->with('success', 'Masina uspješno dodana.');
     }
+
+ 
+    public function delete($id)
+    {
+        $masina = Masina::findOrFail($id);
+
+        $masina->delete();
+
+        return redirect()->route('masine')->with('success', 'Masina uspješno obrisana.');
+    }
+
 }
